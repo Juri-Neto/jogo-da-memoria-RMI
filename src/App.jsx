@@ -13,6 +13,71 @@ const questionMarks = [
 
 function App() {
   const [musicOn, setMusicOn] = useState(true)
+  const [currentScreen, setCurrentScreen] = useState('home')
+
+  if (currentScreen === 'mode') {
+    return (
+      <main className="screen">
+        <section className="mode-panel" aria-label="Escolha do modo de jogo">
+          {questionMarks.map((item) => (
+            <span className={item.className} key={item.className}>
+              {item.symbol}
+            </span>
+          ))}
+
+          <header className="mode-header">
+            <button
+              className="back-button"
+              type="button"
+              onClick={() => setCurrentScreen('home')}
+              aria-label="Voltar para a tela inicial"
+            >
+              ‹
+            </button>
+
+            <div className="mode-title">
+              <p>Como você</p>
+              <h1>Quer jogar?</h1>
+              <span>Escolha o modo que mais combina com você!</span>
+            </div>
+          </header>
+
+          <div className="mode-options">
+            <button className="mode-card online-card" type="button">
+              <span className="mode-illustration" aria-hidden="true">
+                🌎
+              </span>
+
+              <span className="mode-copy">
+                <strong>Jogar Online</strong>
+                <span>Jogue contra outras pessoas em tempo real!</span>
+               
+              </span>
+
+              <span className="mode-arrow" aria-hidden="true">
+                ›
+              </span>
+            </button>
+
+            <button className="mode-card local-card" type="button">
+              <span className="mode-illustration" aria-hidden="true">
+                👦🏻👧🏻
+              </span>
+
+              <span className="mode-copy">
+                <strong>Jogar Local</strong>
+                <span>Jogue com amigos ou familiares no mesmo dispositivo!</span>
+              </span>
+
+              <span className="mode-arrow" aria-hidden="true">
+                ›
+              </span>
+            </button>
+          </div>
+        </section>
+      </main>
+    )
+  }
 
   return (
     <main className="screen">
@@ -39,7 +104,11 @@ function App() {
             <p className="subtitle">Encontre todos os pares!</p>
 
             <div className="actions">
-              <button className="play-button" type="button">
+              <button
+                className="play-button"
+                type="button"
+                onClick={() => setCurrentScreen('mode')}
+              >
                 <span className="play-icon" aria-hidden="true"></span>
                 Jogar
               </button>

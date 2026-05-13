@@ -146,7 +146,6 @@ transform: translateX(100px);
   width: 72px;
   height: 72px;
 
-  
   border: none;
   border-radius: 50%;
 
@@ -156,6 +155,180 @@ transform: translateX(100px);
   font-size: 34px;
 
   cursor: pointer;
+}
+
+.mode-panel {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+  padding: 46px clamp(24px, 7vw, 80px) 56px;
+}
+
+.mode-header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  width: min(100%, 980px);
+  margin: 0 auto 44px;
+}
+
+.back-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 76px;
+  height: 76px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(71, 85, 150, 0.5);
+  color: white;
+  cursor: pointer;
+  font-size: 72px;
+  font-weight: 700;
+  line-height: 0.84;
+  padding: 0 0 9px;
+}
+
+.mode-title {
+  max-width: 540px;
+  padding-top: 72px;
+  text-align: center;
+}
+
+.mode-title p,
+.mode-title h1 {
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.mode-title p {
+  color: white;
+  font-size: 44px;
+  font-weight: 900;
+  line-height: 1;
+  text-shadow: 0 5px 0 rgba(0, 0, 0, 0.28);
+}
+
+.mode-title h1 {
+  color: #facc15;
+  font-size: 54px;
+  line-height: 1.05;
+  text-shadow:
+    0 6px 0 #d97706,
+    0 12px 22px rgba(0, 0, 0, 0.35);
+}
+
+.mode-title span {
+  display: block;
+  max-width: 420px;
+  margin: 24px auto 0;
+  color: white;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.28;
+  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.34);
+}
+
+.mode-options {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 34px;
+  width: min(100%, 860px);
+  margin: 0 auto;
+}
+
+.mode-card {
+    width: 100%;
+    min-height: 10px;
+  display: grid;
+  grid-template-columns: 190px 1fr 48px;
+  align-items: center;
+  gap: 22px;
+  border: 4px solid rgba(255, 255, 255, 0.16);
+  border-radius: 28px;
+  color: white;
+  cursor: pointer;
+  padding: 26px 28px;
+  text-align: left;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.16),
+    0 12px 20px rgba(0, 0, 0, 0.32);
+}
+
+.online-card {
+  background:
+    linear-gradient(145deg, rgba(59, 130, 246, 0.98), rgba(29, 78, 216, 0.98)),
+    #2563eb;
+}
+
+.local-card {
+  background:
+    linear-gradient(145deg, rgba(147, 51, 234, 0.98), rgba(91, 33, 182, 0.98)),
+    #7e22ce;
+  min-height: 170px;
+  padding: 18px 28px;
+}
+
+.local-card .mode-illustration {
+  font-size: 86px;
+}
+
+.mode-illustration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 118px;
+  line-height: 1;
+  filter: drop-shadow(0 10px 12px rgba(0, 0, 0, 0.28));
+}
+
+.mode-copy {
+  display: grid;
+  gap: 12px;
+}
+
+.mode-copy strong {
+  font-size: 34px;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+  text-shadow: 0 4px 0 rgba(0, 0, 0, 0.22);
+}
+
+.mode-copy span {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.28;
+}
+
+.mode-copy small {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.online-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 16px rgba(34, 197, 94, 0.7);
+}
+
+.mode-arrow {
+  justify-self: end;
+  font-size: 76px;
+  font-weight: 700;
+  line-height: 1;
 }
 
 .mark {
@@ -222,4 +395,107 @@ button {
 button:hover {
   transform: translateY(-2px);
   filter: brightness(1.04);
+}
+
+@media (max-width: 780px) {
+  .screen {
+    overflow-y: auto;
+  }
+
+  .home-panel,
+  .mode-panel {
+    padding: 28px 20px;
+  }
+
+  .title-white {
+    font-size: 40px;
+  }
+
+  h1 {
+    font-size: 72px;
+  }
+
+  .content-row {
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .brain-image {
+    width: min(78vw, 320px);
+    transform: none;
+  }
+
+  .subtitle {
+    font-size: 28px;
+    text-align: center;
+  }
+
+  .play-button {
+    font-size: 36px;
+  }
+
+  .mode-panel {
+    min-height: 100vh;
+    padding-top: 34px;
+  }
+
+  .back-button {
+    width: 58px;
+    height: 58px;
+    font-size: 54px;
+    padding-bottom: 7px;
+  }
+
+  .mode-title {
+    padding-top: 72px;
+  }
+
+  .mode-title p {
+    font-size: 34px;
+  }
+
+  .mode-title h1 {
+    font-size: 40px;
+  }
+
+  .mode-title span {
+    font-size: 21px;
+  }
+
+  .mode-options {
+    gap: 26px;
+  }
+
+  .mode-card {
+    min-height: 168px;
+    grid-template-columns: 116px 1fr 28px;
+    gap: 14px;
+    border-radius: 24px;
+    padding: 20px 18px;
+  }
+
+  .mode-illustration {
+    font-size: 74px;
+  }
+
+  .mode-copy strong {
+    font-size: 25px;
+  }
+
+  .mode-copy span {
+    font-size: 18px;
+  }
+
+  .mode-copy small {
+    font-size: 16px;
+  }
+
+  .online-dot {
+    width: 16px;
+    height: 16px;
+  }
+
+  .mode-arrow {
+    font-size: 50px;
+  }
 }
