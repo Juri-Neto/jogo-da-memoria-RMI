@@ -43,15 +43,14 @@ function App() {
           </header>
 
           <div className="mode-options">
-            <button className="mode-card online-card" type="button">
+            <button className="mode-card online-card" type="button" onClick={() => setCurrentScreen('desktop')}>
               <span className="mode-illustration" aria-hidden="true">
                 🌎
               </span>
 
               <span className="mode-copy">
                 <strong>Jogar Online</strong>
-                <span>Jogue contra outras pessoas em tempo real!</span>
-               
+                <span>Use o cliente desktop Java RMI para jogar com outra pessoa.</span>
               </span>
 
               <span className="mode-arrow" aria-hidden="true">
@@ -73,6 +72,46 @@ function App() {
                 ›
               </span>
             </button>
+          </div>
+        </section>
+      </main>
+    )
+  }
+
+  if (currentScreen === 'desktop') {
+    return (
+      <main className="screen">
+        <section className="mode-panel" aria-label="Informações do cliente desktop">
+          {questionMarks.map((item) => (
+            <span className={item.className} key={item.className}>
+              {item.symbol}
+            </span>
+          ))}
+
+          <header className="mode-header">
+            <button
+              className="back-button"
+              type="button"
+              onClick={() => setCurrentScreen('mode')}
+              aria-label="Voltar para os modos de jogo"
+            >
+              ‹
+            </button>
+
+            <div className="mode-title">
+              <p>Jogar Online</p>
+              <h1>Cliente Java Swing</h1>
+              <span>Use o projeto `rmi-client` para se conectar ao servidor RMI e jogar com outro desktop.</span>
+            </div>
+          </header>
+
+          <div className="mode-options">
+            <div className="mode-card local-card" style={{ cursor: 'default' }}>
+              <span className="mode-copy">
+                <strong>Passos</strong>
+                <span>1. Inicie `rmi-server`. 2. Execute `rmi-client`. 3. Crie ou entre em uma sala.</span>
+              </span>
+            </div>
           </div>
         </section>
       </main>
