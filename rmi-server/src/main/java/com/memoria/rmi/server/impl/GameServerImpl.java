@@ -17,12 +17,16 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class GameServerImpl extends UnicastRemoteObject implements GameServer {
     private static final long serialVersionUID = 1L;
     private final Map<String, GameRoom> rooms = new ConcurrentHashMap<>();
     private final Map<String, String> sessionToRoom = new ConcurrentHashMap<>();
     private final Map<String, GameListener> listeners = new ConcurrentHashMap<>();
+    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     public GameServerImpl() throws RemoteException {
         super();
@@ -90,8 +94,11 @@ public class GameServerImpl extends UnicastRemoteObject implements GameServer {
         if (room == null) {
             throw new RemoteException("Sala encerrada.");
         }
-        room.flipCard(sessionId, cardIndex);
+        boolean mismatch = room.flipCard(sessionId, cardIndex);
         broadcastRoomUpdate(room);
+        if (mismatch) {
+            scheduleMismatchHide(room);
+        }
     }
 
     @Override
@@ -136,6 +143,14 @@ public class GameServerImpl extends UnicastRemoteObject implements GameServer {
                 listeners.remove(sessionId);
             }
         }
+    }
+
+    private void scheduleMismatchHide(GameRoom room) {
+        scheduler.schedule(() -> {
+            if (room.hidePendingMismatchIfActive()) {
+                broadcastRoomUpdate(room);
+            }
+        }, 800, TimeUnit.MILLISECONDS);
     }
 
     private String generateRoomCode() {

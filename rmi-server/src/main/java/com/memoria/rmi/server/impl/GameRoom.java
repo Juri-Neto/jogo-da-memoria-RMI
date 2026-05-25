@@ -18,6 +18,8 @@ class GameRoom {
     private GameStatus status = GameStatus.WAITING;
     private int firstSelection = -1;
     private boolean pendingMismatch = false;
+    private int pendingMismatchFirstIndex = -1;
+    private int pendingMismatchSecondIndex = -1;
     private String message = "Aguardando jogador...";
 
     GameRoom(String roomCode) {
@@ -50,11 +52,10 @@ class GameRoom {
         }
         status = GameStatus.WAITING;
         firstSelection = -1;
-        pendingMismatch = false;
         message = "Um jogador saiu. Aguardando novo jogador...";
     }
 
-    synchronized void flipCard(String sessionId, int index) {
+    synchronized boolean flipCard(String sessionId, int index) {
         if (status != GameStatus.PLAYING) {
             throw new IllegalStateException("O jogo ainda não começou.");
         }
@@ -75,7 +76,7 @@ class GameRoom {
         if (firstSelection == -1) {
             firstSelection = index;
             message = players.get(sessionId).getName() + " revelou uma carta.";
-            return;
+            return false;
         }
 
         Card firstCard = cards.get(firstSelection);
@@ -89,11 +90,15 @@ class GameRoom {
                 status = GameStatus.FINISHED;
                 message = "Jogo finalizado! " + players.get(currentPlayerId).getName() + " venceu.";
             }
+            return false;
         } else {
             pendingMismatch = true;
+            pendingMismatchFirstIndex = firstSelection;
+            pendingMismatchSecondIndex = index;
             firstSelection = -1;
             currentPlayerId = getOtherPlayerId(sessionId);
             message = "Não foi par. Vez de " + players.get(currentPlayerId).getName() + ".";
+            return true;
         }
     }
 
@@ -126,13 +131,30 @@ class GameRoom {
         return new ArrayList<>(players.keySet());
     }
 
+    synchronized boolean hidePendingMismatchIfActive() {
+        if (!pendingMismatch) {
+            return false;
+        }
+        hidePendingMismatch();
+        return true;
+    }
+
     private void hidePendingMismatch() {
-        for (Card card : cards) {
-            if (card.isFaceUp() && !card.isMatched()) {
-                card.setFaceUp(false);
+        if (pendingMismatchFirstIndex >= 0) {
+            Card firstCard = cards.get(pendingMismatchFirstIndex);
+            if (!firstCard.isMatched()) {
+                firstCard.setFaceUp(false);
+            }
+        }
+        if (pendingMismatchSecondIndex >= 0) {
+            Card secondCard = cards.get(pendingMismatchSecondIndex);
+            if (!secondCard.isMatched()) {
+                secondCard.setFaceUp(false);
             }
         }
         pendingMismatch = false;
+        pendingMismatchFirstIndex = -1;
+        pendingMismatchSecondIndex = -1;
     }
 
     private boolean allCardsMatched() {
@@ -149,7 +171,7 @@ class GameRoom {
     }
 
     private List<Card> buildShuffledDeck() {
-        String[] symbols = {"A", "B", "C", "D", "E", "F", "G", "H"};
+        String[] symbols = {"❤️", "📧", "📢", "😊", "🤖", "😂", "😍", "👌"};
         List<Card> deck = new ArrayList<>();
         for (String symbol : symbols) {
             deck.add(new Card(symbol));
