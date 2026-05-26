@@ -102,6 +102,20 @@ public class GameServerImpl extends UnicastRemoteObject implements GameServer {
     }
 
     @Override
+    public void restartGame(String sessionId) throws RemoteException {
+        String roomCode = sessionToRoom.get(sessionId);
+        if (roomCode == null) {
+            throw new RemoteException("Sessão inválida.");
+        }
+        GameRoom room = rooms.get(roomCode);
+        if (room == null) {
+            throw new RemoteException("Sala encerrada.");
+        }
+        room.restartGame();
+        broadcastRoomUpdate(room);
+    }
+
+    @Override
     public void leaveGame(String sessionId) throws RemoteException {
         String roomCode = sessionToRoom.remove(sessionId);
         if (roomCode == null) {

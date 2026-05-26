@@ -86,10 +86,44 @@ class GameRoom {
             players.get(sessionId).increaseScore();
             message = players.get(sessionId).getName() + " encontrou um par!";
             firstSelection = -1;
+
             if (allCardsMatched()) {
-                status = GameStatus.FINISHED;
-                message = "Jogo finalizado! " + players.get(currentPlayerId).getName() + " venceu.";
-            }
+
+    status = GameStatus.FINISHED;
+
+    System.out.println("===== FIM DE JOGO =====");
+
+for (Player p : players.values()) {
+    System.out.println(p.getName() + ": " + p.getScore());
+}
+
+    List<Player> playerList = new ArrayList<>(players.values());
+
+    Player player1 = playerList.get(0);
+    Player player2 = playerList.get(1);
+
+    if (player1.getScore() > player2.getScore()) {
+
+        message = "Jogo finalizado! "
+                + player1.getName()
+                + " venceu.";
+
+    } else if (player2.getScore() > player1.getScore()) {
+
+        message = "Jogo finalizado! "
+                + player2.getName()
+                + " venceu.";
+
+    } else {
+
+        message = "Jogo finalizado! Empate entre "
+                + player1.getName()
+                + " e "
+                + player2.getName()
+                + ".";
+
+    }
+}
             return false;
         } else {
             pendingMismatch = true;
@@ -170,6 +204,23 @@ class GameRoom {
         return currentId;
     }
 
+    synchronized void restartGame() {
+        this.cards.clear();
+        this.cards.addAll(buildShuffledDeck());
+        this.status = GameStatus.PLAYING;
+        this.firstSelection = -1;
+        this.pendingMismatch = false;
+        this.pendingMismatchFirstIndex = -1;
+        this.pendingMismatchSecondIndex = -1;
+
+        players.values().forEach(Player::resetScore);
+
+        if (!players.isEmpty()) {
+            currentPlayerId = players.keySet().iterator().next();
+            message = "Novo jogo começou! " + players.get(currentPlayerId).getName() + " começa.";
+        }
+    }
+
     private List<Card> buildShuffledDeck() {
         String[] symbols = {"❤️", "📧", "📢", "😊", "🤖", "😂", "😍", "👌"};
         List<Card> deck = new ArrayList<>();
@@ -234,5 +285,9 @@ class GameRoom {
         void increaseScore() {
             score += 1;
         }
+
+        void resetScore() {
+    score = 0;
+}
     }
 }

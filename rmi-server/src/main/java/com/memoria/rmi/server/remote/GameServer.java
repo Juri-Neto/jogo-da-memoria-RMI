@@ -13,6 +13,7 @@ public interface GameServer extends Remote {
     void registerListener(String sessionId, GameListener listener) throws RemoteException;
     GameState getGameState(String sessionId) throws RemoteException;
     void flipCard(String sessionId, int cardIndex) throws RemoteException;
+    void restartGame(String sessionId) throws RemoteException;
     void leaveGame(String sessionId) throws RemoteException;
     List<RoomInfo> listOpenRooms() throws RemoteException;
 }

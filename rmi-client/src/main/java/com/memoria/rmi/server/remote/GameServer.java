@@ -15,4 +15,5 @@ public interface GameServer extends Remote {
     void flipCard(String sessionId, int cardIndex) throws RemoteException;
     void leaveGame(String sessionId) throws RemoteException;
     List<RoomInfo> listOpenRooms() throws RemoteException;
+    void restartGame(String sessionId) throws RemoteException;
 }

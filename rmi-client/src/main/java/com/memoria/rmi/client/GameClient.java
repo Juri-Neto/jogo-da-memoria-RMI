@@ -40,6 +40,7 @@ public class GameClient extends JFrame {
     private String sessionId;
     private String roomCode;
     private GameListenerImpl listener;
+    private JButton restartButton;
 
     public GameClient() {
         super("Memória RMI - Cliente");
@@ -68,9 +69,13 @@ public class GameClient extends JFrame {
         createButton.addActionListener(this::handleCreateRoom);
         JButton joinButton = new JButton("Entrar na sala");
         joinButton.addActionListener(this::handleJoinRoom);
+        restartButton = new JButton("Reiniciar Jogo");
+        restartButton.addActionListener(this::handleRestartGame);
+        restartButton.setEnabled(false);
         buttonPanel.add(connectButton);
         buttonPanel.add(createButton);
         buttonPanel.add(joinButton);
+        buttonPanel.add(restartButton);
 
         JPanel statusPanel = new JPanel(new GridLayout(3, 1));
         statusLabel.setFont(statusLabel.getFont().deriveFont(Font.BOLD, 16f));
@@ -156,6 +161,18 @@ public class GameClient extends JFrame {
         registerListener();
     }
 
+    private void handleRestartGame(ActionEvent event) {
+        if (server == null || sessionId == null) {
+            showError("Conecte-se e entre em uma sala primeiro.");
+            return;
+        }
+        try {
+            server.restartGame(sessionId);
+        } catch (Exception e) {
+            showError("Erro ao reiniciar jogo: " + e.getMessage());
+        }
+    }
+
     private void registerListener() {
         try {
             String serverHost = serverHostField.getText().trim();
@@ -229,6 +246,7 @@ public class GameClient extends JFrame {
                     button.setBackground(Color.ORANGE);
                 }
             }
+            restartButton.setEnabled(state.getStatus() == GameStatus.FINISHED);
         });
     }
 
