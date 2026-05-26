@@ -18,6 +18,9 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
@@ -155,6 +158,14 @@ public class GameClient extends JFrame {
 
     private void registerListener() {
         try {
+            String serverHost = serverHostField.getText().trim();
+            String localIp = null;
+            if (!serverHost.isEmpty()) {
+                localIp = detectLocalAddressForRemote(serverHost, 1099);
+            }
+            if (localIp != null && !localIp.isEmpty()) {
+                System.setProperty("java.rmi.server.hostname", localIp);
+            }
             listener = new GameListenerImpl(this);
             server.registerListener(sessionId, listener);
             GameState state = server.getGameState(sessionId);
@@ -162,6 +173,22 @@ public class GameClient extends JFrame {
         } catch (Exception e) {
             showError("Erro ao registrar listener: " + e.getMessage());
         }
+    }
+
+    /**
+     * Retorna o endereço IPv4 local que o SO usaria para alcançar o host remoto fornecido.
+     * Não envia dados ao servidor (usa DatagramSocket conectado).
+     */
+    private static String detectLocalAddressForRemote(String remoteHost, int remotePort) {
+        try (DatagramSocket socket = new DatagramSocket()) {
+            socket.connect(new InetSocketAddress(remoteHost, remotePort));
+            InetAddress local = socket.getLocalAddress();
+            if (local != null && !local.isLoopbackAddress()) {
+                return local.getHostAddress();
+            }
+        } catch (Exception ignored) {
+        }
+        return null;
     }
 
     private void handleCardFlip(int index) {
