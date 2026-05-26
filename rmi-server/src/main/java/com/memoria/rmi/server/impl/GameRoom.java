@@ -91,40 +91,49 @@ class GameRoom {
 
     status = GameStatus.FINISHED;
 
-    System.out.println("===== FIM DE JOGO =====");
+    int highestScore = -1;
+    List<Player> winners = new ArrayList<>();
 
-for (Player p : players.values()) {
-    System.out.println(p.getName() + ": " + p.getScore());
-}
+    for (Player player : players.values()) {
 
-    List<Player> playerList = new ArrayList<>(players.values());
+        if (player.getScore() > highestScore) {
 
-    Player player1 = playerList.get(0);
-    Player player2 = playerList.get(1);
+            highestScore = player.getScore();
 
-    if (player1.getScore() > player2.getScore()) {
+            winners.clear();
+            winners.add(player);
+
+        } else if (player.getScore() == highestScore) {
+
+            winners.add(player);
+        }
+    }
+
+    if (winners.size() == 1) {
 
         message = "Jogo finalizado! "
-                + player1.getName()
-                + " venceu.";
-
-    } else if (player2.getScore() > player1.getScore()) {
-
-        message = "Jogo finalizado! "
-                + player2.getName()
+                + winners.get(0).getName()
                 + " venceu.";
 
     } else {
 
-        message = "Jogo finalizado! Empate entre "
-                + player1.getName()
-                + " e "
-                + player2.getName()
-                + ".";
+        message = "Jogo finalizado! Empate entre ";
 
+        for (int i = 0; i < winners.size(); i++) {
+
+            message += winners.get(i).getName();
+
+            if (i < winners.size() - 1) {
+                message += " e ";
+            }
+        }
+
+        message += ".";
     }
 }
-            return false;
+
+return false;
+
         } else {
             pendingMismatch = true;
             pendingMismatchFirstIndex = firstSelection;
