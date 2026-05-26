@@ -58,10 +58,16 @@ Abra um terminal na pasta:
 rmi-server
 ```
 
-Compile:
+Compilação:
 
 ```bash
 javac -d target/classes src/main/java/com/memoria/rmi/server/**/*.java
+```
+
+Compilação alternativa (PowerShell)
+
+```powershell
+javac -d target\classes $(Get-ChildItem -Path src\main\java -Recurse -Filter *.java | Select-Object -ExpandProperty FullName)
 ```
 
 Execute:
@@ -80,10 +86,16 @@ Abra outro terminal na pasta:
 rmi-client
 ```
 
-Compile:
+Compilação:
 
 ```bash
 javac -d target/classes src/main/java/com/memoria/rmi/server/**/*.java src/main/java/com/memoria/rmi/client/**/*.java
+```
+
+Compilação alternativa (PowerShell)
+
+```powershell
+javac -d target\classes $(Get-ChildItem -Path src\main\java -Recurse -Filter *.java | Select-Object -ExpandProperty FullName)
 ```
 
 Execute:
